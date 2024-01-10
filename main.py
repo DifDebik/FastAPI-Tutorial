@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from enum import Enum
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 
 app = FastAPI(
     title = 'Trading App'
@@ -40,7 +40,7 @@ class User(BaseModel):
     id: int
     role: str
     name: str
-    degree: Optional[List[Degree]] = []
+    degree: Optional[list[Degree]] = []
 
 
 fake_users = [
@@ -65,7 +65,7 @@ fake_trades = [
 
 
 
-@app.get('/users/{user_id}', response_model=List[User])
+@app.get('/users/{user_id}', response_model=list[User])
 def get_user(user_id: int):
     return [user for user in fake_users if user.get("id") == user_id]
 
@@ -77,12 +77,12 @@ def get_trades(limit: int = 1, offset: int = 0):
 
 @app.post('/users/{user_id}')
 def change_user_name(user_id: int, new_name: str):
-    current_user = List(filter(lambda user: user.get('id') == user_id, fake_users2))[0]
+    current_user = list(filter(lambda user: user.get('id') == user_id, fake_users2))[0]
     current_user['name'] = new_name
     return {'status': 200, 'data': current_user}
 
 
 @app.post('/trades')
-def add_trades(trades: List[Trade]):
+def add_trades(trades: list[Trade]):
     fake_trades.extend(trades)
     return {'status': 200, 'data': fake_trades}
